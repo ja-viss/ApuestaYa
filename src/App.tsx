@@ -19,7 +19,8 @@ import { BrowserRouter as Router, Routes, Route, Link, useLocation } from "react
 import HomePage from "./components/HomePage";
 import Windows10Page from "./components/Windows10Page";
 import Windows7Page from "./components/Windows7Page";
-import LotteryPage from "./components/LotteryPage";
+import ToolsPage from "./components/ToolsPage";
+import DrivePage from "./components/DrivePage";
 import { LoginPage } from "./components/LoginPage";
 import { UploadPage } from "./components/UploadPage";
 
@@ -113,7 +114,8 @@ const Navbar = () => {
         )}
         <Link to="/windows10" className="hover:text-cyan-400 transition-colors">Windows 10</Link>
         <Link to="/windows7" className="hover:text-cyan-400 transition-colors">Windows 7</Link>
-        <Link to="/lottery" className="hover:text-cyan-400 transition-colors">Lotería</Link>
+        <Link to="/tools" className="hover:text-cyan-400 transition-colors">Herramientas</Link>
+        <Link to="/drive" className="hover:text-cyan-400 transition-colors">Drive</Link>
       </div>
 
       {/* Desktop Action */}
@@ -149,7 +151,8 @@ const Navbar = () => {
             <div className="flex flex-col gap-6 font-black uppercase text-sm tracking-widest text-center">
               <Link to="/windows10" className="py-4 border-b border-white/5 hover:text-cyan-400">Windows 10</Link>
               <Link to="/windows7" className="py-4 border-b border-white/5 hover:text-cyan-400">Windows 7</Link>
-              <Link to="/lottery" className="py-4 border-b border-white/5 hover:text-cyan-400">Lotería</Link>
+              <Link to="/tools" className="py-4 border-b border-white/5 hover:text-cyan-400">Herramientas</Link>
+              <Link to="/drive" className="py-4 border-b border-white/5 hover:text-cyan-400">Drive</Link>
               <Link to="/login" className="mt-4">
                 <button className="w-full bg-cyan-400 text-black py-5 rounded-2xl font-black uppercase tracking-widest">
                   Acceso Técnico
@@ -197,7 +200,8 @@ export default function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/windows10" element={<Windows10Page />} />
             <Route path="/windows7" element={<Windows7Page />} />
-            <Route path="/lottery" element={<LotteryPage />} />
+            <Route path="/tools" element={<ToolsPage />} />
+            <Route path="/drive" element={<DrivePage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/upload" element={<UploadPage />} />
           </Routes>

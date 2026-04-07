@@ -4,7 +4,7 @@
  */
 
 import { motion } from "motion/react";
-import { Smartphone, Settings, ShieldCheck, Monitor, Trophy, Database } from "lucide-react";
+import { Smartphone, Settings, ShieldCheck, Monitor, Trophy, Wrench, Globe } from "lucide-react";
 import { Link } from "react-router-dom";
 
 /**
@@ -92,11 +92,18 @@ export default function HomePage() {
             <p className="text-purple-300 text-sm mt-2">Sistemas Legacy y Terminales</p>
           </motion.div>
         </Link>
-        <Link to="/lottery" className="group">
+        <Link to="/tools" className="group">
           <motion.div whileHover={{ scale: 1.05 }} className="bg-white/5 p-8 rounded-[2rem] border border-white/10 text-center hover:bg-white/10 hover:border-cyan-400/30 transition-all">
-            <Database className="w-12 h-12 text-cyan-400 mx-auto mb-4" />
-            <h3 className="text-2xl font-bold uppercase italic">Lotería</h3>
-            <p className="text-purple-300 text-sm mt-2">Scripts y Formatos de Carga</p>
+            <Wrench className="w-12 h-12 text-cyan-400 mx-auto mb-4" />
+            <h3 className="text-2xl font-bold uppercase italic">Herramientas</h3>
+            <p className="text-purple-300 text-sm mt-2">Utilidades y Software Técnico</p>
+          </motion.div>
+        </Link>
+        <Link to="/drive" className="group">
+          <motion.div whileHover={{ scale: 1.05 }} className="bg-white/5 p-8 rounded-[2rem] border border-white/10 text-center hover:bg-white/10 hover:border-cyan-400/30 transition-all">
+            <Globe className="w-12 h-12 text-cyan-400 mx-auto mb-4" />
+            <h3 className="text-2xl font-bold uppercase italic">Repositorio</h3>
+            <p className="text-purple-300 text-sm mt-2">Todos los Archivos en Drive</p>
           </motion.div>
         </Link>
       </section>
