@@ -12,17 +12,26 @@ import {
   Menu,
   X
 } from "lucide-react";
-import { useState, useEffect, memo } from "react";
+import { useState, useEffect, memo, lazy, Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from "react-router-dom";
 
-// Importación de las páginas creadas
-import HomePage from "./components/HomePage";
-import Windows10Page from "./components/Windows10Page";
-import Windows7Page from "./components/Windows7Page";
-import ToolsPage from "./components/ToolsPage";
-import DrivePage from "./components/DrivePage";
-import { LoginPage } from "./components/LoginPage";
-import { UploadPage } from "./components/UploadPage";
+// Carga perezosa de páginas para reducir el bundle inicial
+const HomePage = lazy(() => import("./components/HomePage"));
+const Windows10Page = lazy(() => import("./components/Windows10Page"));
+const Windows7Page = lazy(() => import("./components/Windows7Page"));
+const ToolsPage = lazy(() => import("./components/ToolsPage"));
+const DrivePage = lazy(() => import("./components/DrivePage"));
+const LoginPage = lazy(() => import("./components/LoginPage").then(m => ({ default: m.LoginPage })));
+const UploadPage = lazy(() => import("./components/UploadPage").then(m => ({ default: m.UploadPage })));
+
+/**
+ * Componente de carga simple para Suspense
+ */
+const PageLoader = () => (
+  <div className="flex items-center justify-center min-h-[50vh]">
+    <div className="w-8 h-8 border-4 border-cyan-400 border-t-transparent rounded-full animate-spin" />
+  </div>
+);
 
 /**
  * Componente FloatingMoney: Crea un efecto visual de billetes de dólar cayendo.
@@ -32,9 +41,16 @@ const FloatingMoney = memo(() => {
   const [bills, setBills] = useState<{ id: number; x: number; delay: number; duration: number; rotation: number }[]>([]);
 
   useEffect(() => {
-    // Detectar si es móvil para reducir carga
+    // Detectar si es móvil para reducir carga o desactivar
     const isMobile = window.innerWidth < 768;
-    const count = isMobile ? 8 : 15;
+    const isVerySmall = window.innerWidth < 480; // Aumentado el umbral para mini celulares
+    
+    if (isVerySmall) {
+      setBills([]);
+      return;
+    }
+
+    const count = isMobile ? 3 : 10; // Reducido aún más
 
     const newBills = Array.from({ length: count }).map((_, i) => ({
       id: i,
@@ -174,18 +190,17 @@ export default function App() {
     <Router>
       <div className="min-h-screen bg-[#06040a] text-white font-sans selection:bg-cyan-400 selection:text-black overflow-x-hidden">
         {/* Fondo Atmosférico */}
-        <div className="fixed inset-0 pointer-events-none z-0">
-          {/* Gradientes radiales para profundidad */}
-          <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-purple-900/20 blur-[120px] rounded-full animate-pulse" />
-          <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-cyan-900/10 blur-[120px] rounded-full animate-pulse delay-700" />
-          <div className="absolute top-[20%] right-[10%] w-[40%] h-[40%] bg-blue-900/10 blur-[100px] rounded-full animate-pulse delay-1000" />
+        <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+          {/* Gradientes radiales simplificados para móvil - Eliminados en mini celulares */}
+          <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-purple-900/10 blur-[60px] md:blur-[120px] rounded-full hidden sm:block" />
+          <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-cyan-900/5 blur-[60px] md:blur-[120px] rounded-full hidden md:block" />
           
-          {/* Capa de ruido para textura */}
-          <div className="absolute inset-0 opacity-[0.03] mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
+          {/* Capa de ruido solo en escritorio */}
+          <div className="absolute inset-0 opacity-[0.01] mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')] hidden lg:block" />
           
-          {/* Patrón de cuadrícula técnica */}
-          <div className="absolute inset-0 opacity-[0.05]" 
-               style={{ backgroundImage: 'radial-gradient(circle, #22d3ee 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
+          {/* Patrón de cuadrícula técnica más ligero y estático en móvil */}
+          <div className="absolute inset-0 opacity-[0.02] md:opacity-[0.05]" 
+               style={{ backgroundImage: 'radial-gradient(circle, #22d3ee 1px, transparent 1px)', backgroundSize: '80px 80px' }} />
         </div>
 
         {/* Fondo animado de billetes */}
@@ -196,15 +211,17 @@ export default function App() {
 
         {/* Contenido Dinámico según la Ruta */}
         <main className="relative z-10 min-h-[70vh]">
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/windows10" element={<Windows10Page />} />
-            <Route path="/windows7" element={<Windows7Page />} />
-            <Route path="/tools" element={<ToolsPage />} />
-            <Route path="/drive" element={<DrivePage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/upload" element={<UploadPage />} />
-          </Routes>
+          <Suspense fallback={<PageLoader />}>
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/windows10" element={<Windows10Page />} />
+              <Route path="/windows7" element={<Windows7Page />} />
+              <Route path="/tools" element={<ToolsPage />} />
+              <Route path="/drive" element={<DrivePage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/upload" element={<UploadPage />} />
+            </Routes>
+          </Suspense>
         </main>
 
         {/* Footer Global */}

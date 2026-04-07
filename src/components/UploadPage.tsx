@@ -4,7 +4,6 @@
  */
 
 import React, { useEffect } from "react";
-import { motion } from "motion/react";
 import { FileText, LogOut, Upload } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -61,11 +60,7 @@ export const UploadPage = () => {
       </div>
 
       {/* Contenedor del Botón de Carga */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.98 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className="flex-1 w-full bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2.5rem] overflow-hidden shadow-2xl flex flex-col items-center justify-center p-8 text-center min-h-[400px]"
-      >
+      <div className="flex-1 w-full bg-white/5 backdrop-blur-md border border-white/10 rounded-[2.5rem] overflow-hidden shadow-2xl flex flex-col items-center justify-center p-8 text-center min-h-[400px] animate-in fade-in zoom-in-95 duration-500">
         <div className="bg-cyan-400/10 p-6 rounded-full mb-8 border border-cyan-400/20">
           <Upload size={48} className="text-cyan-400" />
         </div>
@@ -75,16 +70,14 @@ export const UploadPage = () => {
           Haz clic en el botón de abajo para abrir el formulario oficial de carga en una nueva pestaña y enviar tus recursos al repositorio.
         </p>
 
-        <motion.button
-          whileHover={{ scale: 1.05, boxShadow: "0 0 30px rgba(34,211,238,0.3)" }}
-          whileTap={{ scale: 0.95 }}
+        <button
           onClick={() => window.open("https://docs.google.com/forms/d/e/1FAIpQLScRilfRjdnhRykod69C1St2mLa9vqfVPfH6FGH73VXJyvsv2Q/viewform?usp=sf_link", "_blank")}
-          className="bg-cyan-400 text-black px-12 py-5 rounded-2xl font-black uppercase tracking-widest text-sm shadow-xl shadow-cyan-400/20 flex items-center gap-3 group"
+          className="bg-cyan-400 text-black px-12 py-5 rounded-2xl font-black uppercase tracking-widest text-sm shadow-xl shadow-cyan-400/20 flex items-center gap-3 group transition-all active:scale-95"
         >
           <FileText size={20} className="group-hover:rotate-12 transition-transform" />
           <span>Abrir Formulario de Carga</span>
-        </motion.button>
-      </motion.div>
+        </button>
+      </div>
 
       {/* Pie de página del panel */}
       <div className="mt-8 text-center shrink-0">

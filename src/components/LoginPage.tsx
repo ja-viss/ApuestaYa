@@ -4,9 +4,9 @@
  */
 
 import React, { useState } from "react";
-import { motion } from "motion/react";
 import { Lock, User, LogIn, AlertCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { motion } from "motion/react";
 
 /**
  * Componente de la página de inicio de sesión para el acceso técnico.
@@ -44,20 +44,15 @@ export const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center px-4">
-      <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5 }}
-        className="w-full max-w-md"
-      >
-        <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl">
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-cyan-400 text-black mb-4 shadow-lg shadow-cyan-400/20">
-              <Lock size={32} />
+    <div className="min-h-[80vh] flex items-center justify-center px-4 py-8">
+      <div className="w-full max-w-md animate-in fade-in zoom-in-95 duration-500">
+        <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-3xl p-6 md:p-8 shadow-2xl">
+          <div className="text-center mb-6 md:mb-8">
+            <div className="inline-flex items-center justify-center w-14 h-14 md:w-16 md:h-16 rounded-full bg-cyan-400 text-black mb-4 shadow-lg shadow-cyan-400/20">
+              <Lock size={28} />
             </div>
-            <h1 className="text-3xl font-bold text-white mb-2">Acceso Técnico</h1>
-            <p className="text-purple-200">Ingrese sus credenciales para gestionar archivos</p>
+            <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">Acceso Técnico</h1>
+            <p className="text-sm text-purple-200">Ingrese sus credenciales para gestionar archivos</p>
           </div>
 
           <form onSubmit={handleLogin} className="space-y-6">
@@ -122,7 +117,7 @@ export const LoginPage = () => {
             </button>
           </form>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 };
