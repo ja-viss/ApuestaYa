@@ -1,20 +1,33 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Portal Técnico - Apuesta Ya
 
-# Run and deploy your AI Studio app
+Portal técnico para la gestión de drivers, sistemas y herramientas de lotería.
 
-This contains everything you need to run your app locally.
+## Despliegue en Render
 
-View your app in AI Studio: https://ai.studio/apps/b8bc3874-1b8a-421b-a882-5fca7bfb9bd4
+Para desplegar esta aplicación en Render como un **Static Site**:
 
-## Run Locally
+1.  **Conecta tu repositorio** de GitHub/GitLab a Render.
+2.  Selecciona el tipo de servicio **Static Site**.
+3.  Configura los siguientes campos:
+    *   **Build Command:** `npm run build`
+    *   **Publish Directory:** `dist`
+4.  Añade las siguientes **Environment Variables** en el panel de Render:
+    *   `VITE_DRIVE_API_KEY`: Tu API Key de Google Drive.
+    *   `VITE_DRIVE_FOLDER_ID`: El ID de la carpeta de Drive.
+    *   `VITE_FIREBASE_API_KEY`: API Key de Firebase.
+    *   `VITE_FIREBASE_AUTH_DOMAIN`: Dominio de autenticación de Firebase.
+    *   `VITE_FIREBASE_PROJECT_ID`: ID del proyecto de Firebase.
+    *   `VITE_FIREBASE_STORAGE_BUCKET`: Bucket de almacenamiento de Firebase.
+    *   `VITE_FIREBASE_MESSAGING_SENDER_ID`: ID del remitente de mensajería.
+    *   `VITE_FIREBASE_APP_ID`: ID de la aplicación de Firebase.
+    *   `VITE_FIREBASE_FIRESTORE_DATABASE_ID`: ID de la base de datos de Firestore.
 
-**Prerequisites:**  Node.js
+### Notas importantes:
+*   La aplicación utiliza `react-router-dom`, por lo que se ha incluido un archivo `public/_redirects` y una configuración en `render.yaml` para manejar las rutas del lado del cliente (SPA).
+*   Si no configuras las variables de entorno, la aplicación intentará usar los valores por defecto configurados en el código (si están presentes).
 
+## Desarrollo Local
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+1.  Instala las dependencias: `npm install`
+2.  Inicia el servidor de desarrollo: `npm run dev`
+3.  Construye para producción: `npm run build`
