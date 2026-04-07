@@ -1,0 +1,59 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    //
+    // Collection: downloads
+    // Document ID: auto-generated
+    // Fields:
+    //   - name: string (required) - Nombre del archivo
+    //   - desc: string (required) - Descripción del archivo
+    //   - size: string (required) - Tamaño del archivo
+    //   - category: string (required, enum: win10, win7, lottery) - Categoría
+    //   - link: string (required) - Enlace de descarga
+    //   - createdAt: timestamp (required) - Fecha de creación
+    //   - uploadedBy: string (optional) - UID del usuario
+    //
+    // ===============================================================
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      // For this app, we'll allow the specific user provided by the user
+      // Since we're using Firebase Auth, we'll check the email or a custom claim
+      // But for now, we'll allow any authenticated user to write to downloads
+      // if they are logged in with the technical account.
+      return isAuthenticated() && (
+        request.auth.token.email == "javier.cloud.sayago@gmail.com" ||
+        request.auth.token.email == "apuestaya@tecnico.com"
+      );
+    }
+
+    function isValidDownload(data) {
+      return data.keys().hasAll(['name', 'desc', 'size', 'category', 'link', 'createdAt']) &&
+             data.name is string && data.name.size() > 0 && data.name.size() < 100 &&
+             data.desc is string && data.desc.size() > 0 && data.desc.size() < 500 &&
+             data.size is string && data.size.size() > 0 && data.size.size() < 20 &&
+             data.category in ['win10', 'win7', 'lottery'] &&
+             data.link is string && data.link.size() > 0 &&
+             data.createdAt is timestamp;
+    }
+
+    match /downloads/{downloadId} {
+      allow read: if true; // Publicly readable for the technical portal
+      allow create, update: if isAdmin() && isValidDownload(request.resource.data);
+      allow delete: if isAdmin();
+    }
+
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+  }
+}

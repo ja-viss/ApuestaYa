@@ -1,0 +1,48 @@
+{
+  "entities": {
+    "Download": {
+      "title": "Download",
+      "description": "Un archivo descargable en el portal técnico.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Nombre del archivo."
+        },
+        "desc": {
+          "type": "string",
+          "description": "Descripción del archivo."
+        },
+        "size": {
+          "type": "string",
+          "description": "Tamaño del archivo (ej. 1.2 GB)."
+        },
+        "category": {
+          "type": "string",
+          "enum": ["win10", "win7", "lottery"],
+          "description": "Categoría del archivo."
+        },
+        "link": {
+          "type": "string",
+          "description": "Enlace de descarga."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Fecha de creación."
+        },
+        "uploadedBy": {
+          "type": "string",
+          "description": "UID del usuario que subió el archivo."
+        }
+      },
+      "required": ["name", "desc", "size", "category", "link", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/downloads/{downloadId}": {
+      "schema": "Download",
+      "description": "Colección de archivos descargables."
+    }
+  }
+}
