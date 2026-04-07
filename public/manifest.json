@@ -1,0 +1,21 @@
+{
+  "name": "Apuesta Ya - Portal Técnico",
+  "short_name": "ApuestaYa",
+  "description": "Portal oficial para técnicos de Apuesta Ya",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#06040a",
+  "theme_color": "#22d3ee",
+  "icons": [
+    {
+      "src": "https://picsum.photos/seed/apuestaya/192/192",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://picsum.photos/seed/apuestaya/512/512",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

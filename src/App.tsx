@@ -96,7 +96,25 @@ FloatingMoney.displayName = "FloatingMoney";
 const Navbar = () => {
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const isHome = location.pathname === "/";
+
+  useEffect(() => {
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+    });
+  }, []);
+
+  const handleInstall = async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') {
+        setDeferredPrompt(null);
+      }
+    }
+  };
 
   // Cerrar menú al cambiar de ruta
   useEffect(() => {
@@ -135,7 +153,15 @@ const Navbar = () => {
       </div>
 
       {/* Desktop Action */}
-      <div className="hidden lg:block">
+      <div className="hidden lg:flex items-center gap-4">
+        {deferredPrompt && (
+          <button
+            onClick={handleInstall}
+            className="bg-white/10 hover:bg-white/20 text-cyan-400 px-4 py-3 rounded-2xl font-black uppercase text-[10px] tracking-[0.2em] transition-all"
+          >
+            Instalar App
+          </button>
+        )}
         <Link to="/login">
           <motion.button
             whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(34,211,238,0.4)" }}
@@ -165,6 +191,14 @@ const Navbar = () => {
             className="absolute top-24 left-6 right-6 bg-[#0a0a0a]/95 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-8 z-50 shadow-2xl lg:hidden"
           >
             <div className="flex flex-col gap-6 font-black uppercase text-sm tracking-widest text-center">
+              {deferredPrompt && (
+                <button 
+                  onClick={handleInstall}
+                  className="py-4 border-b border-white/5 text-cyan-400"
+                >
+                  Instalar Aplicación
+                </button>
+              )}
               <Link to="/windows10" className="py-4 border-b border-white/5 hover:text-cyan-400">Windows 10</Link>
               <Link to="/windows7" className="py-4 border-b border-white/5 hover:text-cyan-400">Windows 7</Link>
               <Link to="/tools" className="py-4 border-b border-white/5 hover:text-cyan-400">Herramientas</Link>
