@@ -16,59 +16,45 @@ export default function HomePage() {
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-8 md:py-12">
-      {/* Hero Section: Adaptable para móvil y escritorio */}
+    <div className="max-w-7xl mx-auto px-6 py-8 md:py-12 relative z-10">
+      {/* Hero Section: Optimizado para carga instantánea */}
       <section className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center mb-12 md:mb-20">
-        <div className={`text-center lg:text-left ${!isMobile ? 'animate-in fade-in slide-in-from-bottom-4 duration-700' : ''}`}>
-          <h1 className="text-4xl sm:text-6xl md:text-8xl font-black italic uppercase leading-none mb-6 drop-shadow-[0_5px_0_rgba(0,0,0,0.2)]">
-            <span className="block text-white">Portal</span>
-            <span className="block text-cyan-400">Técnico</span>
-            <span className="block text-white">Oficial</span>
+        <div className="text-center lg:text-left">
+          <h1 className="text-5xl sm:text-7xl md:text-8xl font-black italic uppercase leading-none mb-6 drop-shadow-lg">
+            <span className="block text-white [text-shadow:2px_2px_0_#000]">Apuesta</span>
+            <span className="block text-cyan-400 [text-shadow:2px_2px_0_#fff]">Ya</span>
+            <span className="block text-white text-2xl md:text-4xl mt-4 tracking-tighter opacity-90">Portal Técnico</span>
           </h1>
-          <p className="text-sm md:text-xl text-purple-100 mb-8 max-w-md mx-auto lg:mx-0 leading-relaxed opacity-90">
-            Recursos exclusivos para el personal técnico de Apuesta Ya. Drivers, sistemas y herramientas de lotería.
-          </p>
           
-          <div className="flex flex-wrap justify-center lg:justify-start gap-3 md:gap-4">
-            <div className="bg-white/5 backdrop-blur-md p-3 md:p-4 rounded-2xl border border-white/10 flex items-center gap-3 md:gap-4">
-              <div className="bg-green-500/80 p-2 md:p-3 rounded-xl">
-                <Settings className="w-5 h-5 md:w-6 md:h-6" />
-              </div>
-              <div>
-                <p className="text-[10px] text-purple-200 uppercase font-bold tracking-tighter">Estado</p>
-                <p className="text-sm md:text-base font-bold">Online</p>
-              </div>
+          <div className="bg-black/10 p-6 rounded-2xl border border-white/10 mb-8 max-w-lg mx-auto lg:mx-0">
+            <p className="text-sm md:text-base font-bold italic uppercase text-cyan-300 mb-2 tracking-widest">• ANIMALITOS • RULETA • PARLEY</p>
+            <div className="text-xs md:text-sm font-medium text-white/80">
+              <p>RIF: J-50728157-4</p>
+              <p>Telf: 0414-7221613 / 0414-7221091</p>
             </div>
-            
-            <div className="bg-white/5 backdrop-blur-md p-3 md:p-4 rounded-2xl border border-white/10 flex items-center gap-3 md:gap-4">
-              <div className="bg-cyan-400/80 p-2 md:p-3 rounded-xl text-black">
-                <ShieldCheck className="w-5 h-5 md:w-6 md:h-6" />
-              </div>
-              <div>
-                <p className="text-[10px] text-purple-200 uppercase font-bold tracking-tighter">Seguridad</p>
-                <p className="text-sm md:text-base font-bold">VPN</p>
-              </div>
+          </div>
+          
+          <div className="flex justify-center lg:justify-start">
+            <div className="bg-white/5 p-3 rounded-xl border border-white/10 flex items-center gap-3">
+              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+              <span className="text-[10px] uppercase font-black tracking-widest">Sistemas Activos</span>
             </div>
           </div>
         </div>
 
-        {!isMobile && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.3 }}
-            className="relative hidden lg:block"
-          >
-            <div className="absolute -top-10 -left-10 w-32 h-32 bg-pink-500 rounded-full blur-3xl opacity-20" />
-            <div className="absolute -bottom-10 -right-10 w-48 h-48 bg-cyan-400 rounded-full blur-3xl opacity-10" />
-            
-            <div className="relative z-10 rounded-3xl overflow-hidden shadow-2xl shadow-black/40 border border-white/10 bg-purple-900/10 backdrop-blur-xl p-8 text-center">
-               <Trophy className="w-16 h-16 text-cyan-400 mx-auto mb-6" />
-               <h2 className="text-2xl font-black uppercase italic">Bienvenido, Técnico</h2>
-               <p className="text-purple-200 mt-4 text-sm">Selecciona una categoría para comenzar la descarga de archivos.</p>
-            </div>
-          </motion.div>
-        )}
+        <div className="relative group">
+          <div className="relative z-10 overflow-hidden rounded-[2rem] shadow-2xl border-2 border-white/10 bg-white/5">
+            <img 
+              src="/hero-image.jpeg" 
+              alt="Apuesta Ya Hero" 
+              className="w-full h-auto transform group-hover:scale-105 transition-transform duration-700"
+              loading="lazy"
+              referrerPolicy="no-referrer"
+            />
+          </div>
+          {/* Decoración simple sin filtros de blur pesados */}
+          <div className="absolute -inset-4 bg-cyan-400/10 rounded-[2.5rem] -z-10" />
+        </div>
       </section>
 
       {/* Categorías Rápidas */}

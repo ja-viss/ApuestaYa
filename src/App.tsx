@@ -50,28 +50,28 @@ const FloatingMoney = memo(() => {
       return;
     }
 
-    const count = isMobile ? 3 : 10; // Reducido aún más
+    const count = isMobile ? 2 : 5; // Reducido al mínimo para ahorrar RAM
 
     const newBills = Array.from({ length: count }).map((_, i) => ({
       id: i,
       x: Math.random() * 100,
       delay: Math.random() * 5,
-      duration: 8 + Math.random() * 12, // Más lento para ser menos distractor
+      duration: 12 + Math.random() * 8, 
       rotation: Math.random() * 360,
     }));
     setBills(newBills);
   }, []);
 
   return (
-    <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
+    <div className="fixed inset-0 pointer-events-none overflow-hidden z-0 opacity-20">
       {bills.map((bill) => (
         <motion.div
           key={bill.id}
-          initial={{ y: -100, opacity: 0, x: `${bill.x}%`, rotate: bill.rotation }}
+          initial={{ y: -50, opacity: 0, x: `${bill.x}%`, rotate: bill.rotation }}
           animate={{ 
             y: "110vh", 
-            opacity: [0, 0.4, 0.4, 0],
-            rotate: bill.rotation + 360 
+            opacity: [0, 1, 1, 0],
+            rotate: bill.rotation + 180 
           }}
           transition={{ 
             duration: bill.duration, 
@@ -79,9 +79,9 @@ const FloatingMoney = memo(() => {
             delay: bill.delay,
             ease: "linear"
           }}
-          className="absolute text-green-400/20 font-bold text-4xl select-none"
+          className="absolute"
         >
-          $
+          <div className="w-8 h-4 bg-green-500/30 border border-green-400/20 rounded-sm" />
         </motion.div>
       ))}
     </div>
@@ -128,11 +128,8 @@ const Navbar = () => {
         <motion.div 
           initial={{ x: -20, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
-          className="flex items-center gap-3"
+          className="flex items-center"
         >
-          <div className="bg-white p-1.5 rounded-xl shadow-lg shadow-white/10 group-hover:rotate-12 transition-transform">
-            <Trophy className="text-purple-900 w-6 h-6" />
-          </div>
           <span className="text-2xl font-black tracking-tighter italic uppercase">
             Apuesta <span className="text-cyan-400">Ya</span>
           </span>
@@ -222,19 +219,12 @@ const Navbar = () => {
 export default function App() {
   return (
     <Router>
-      <div className="min-h-screen bg-[#06040a] text-white font-sans selection:bg-cyan-400 selection:text-black overflow-x-hidden">
-        {/* Fondo Atmosférico */}
-        <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-          {/* Gradientes radiales simplificados para móvil - Eliminados en mini celulares */}
-          <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-purple-900/10 blur-[60px] md:blur-[120px] rounded-full hidden sm:block" />
-          <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-cyan-900/5 blur-[60px] md:blur-[120px] rounded-full hidden md:block" />
-          
-          {/* Capa de ruido solo en escritorio */}
-          <div className="absolute inset-0 opacity-[0.01] mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')] hidden lg:block" />
-          
-          {/* Patrón de cuadrícula técnica más ligero y estático en móvil */}
-          <div className="absolute inset-0 opacity-[0.02] md:opacity-[0.05]" 
-               style={{ backgroundImage: 'radial-gradient(circle, #22d3ee 1px, transparent 1px)', backgroundSize: '80px 80px' }} />
+      <div className="min-h-screen bg-[#7c3aed] text-white font-sans selection:bg-cyan-400 selection:text-black overflow-x-hidden">
+        {/* Fondo Optimizado: Solo CSS, cero imágenes o filtros pesados */}
+        <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden bg-gradient-to-br from-[#7c3aed] via-[#6d28d9] to-[#5b21b6]">
+          {/* Patrón de cuadrícula ultra ligero */}
+          <div className="absolute inset-0 opacity-[0.05]" 
+               style={{ backgroundImage: 'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
         </div>
 
         {/* Fondo animado de billetes */}
@@ -244,7 +234,7 @@ export default function App() {
         <Navbar />
 
         {/* Contenido Dinámico según la Ruta */}
-        <main className="relative z-10 min-h-[70vh]">
+        <main className="relative z-10 min-h-[70vh]" style={{ contentVisibility: 'auto' }}>
           <Suspense fallback={<PageLoader />}>
             <Routes>
               <Route path="/" element={<HomePage />} />

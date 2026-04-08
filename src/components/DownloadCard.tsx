@@ -36,36 +36,44 @@ export const DownloadCard = memo(({ item, index }: DownloadCardProps) => {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: isMobile ? 10 : 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ delay: isMobile ? 0 : index * 0.05, duration: 0.3 }}
-      viewport={{ once: true }}
-      whileHover={isMobile ? {} : { y: -5 }}
-      className="bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-3xl group transition-colors hover:border-cyan-400/30"
+      initial={{ opacity: 0, scale: 0.95 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      transition={{ delay: isMobile ? 0 : (index % 6) * 0.03, duration: 0.2 }}
+      viewport={{ once: true, margin: "50px" }}
+      whileHover={isMobile ? {} : { y: -4, scale: 1.02 }}
+      className="relative bg-[#1a1033] border border-white/10 p-5 rounded-2xl group transition-all duration-200 hover:border-cyan-400/50 hover:shadow-[0_0_20px_rgba(34,211,238,0.1)] overflow-hidden"
     >
-      {/* Icono con efecto de hover */}
-      <div className="bg-cyan-500/10 w-12 h-12 rounded-xl flex items-center justify-center mb-6 text-cyan-400 group-hover:bg-cyan-400 group-hover:text-black transition-all duration-300 border border-cyan-400/20">
-        {item.icon}
-      </div>
+      {/* Fondo decorativo sutil */}
+      <div className="absolute -right-4 -top-4 w-24 h-24 bg-cyan-400/5 rounded-full blur-2xl group-hover:bg-cyan-400/10 transition-colors" />
       
-      {/* Información del archivo */}
-      <h3 className="text-xl font-bold mb-2 group-hover:text-cyan-400 transition-colors line-clamp-1">{item.name}</h3>
-      <p className="text-sm text-purple-200 mb-6 line-clamp-2">
-        {item.desc}
-      </p>
-      
-      {/* Pie de la tarjeta con tamaño y botón de descarga */}
-      <div className="flex items-center justify-between mt-auto">
-        <span className="text-[10px] font-black uppercase tracking-widest text-white/40">{item.size}</span>
-        <motion.button
-          whileHover={isMobile ? {} : { scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
-          className="bg-cyan-400 text-black p-3 rounded-xl shadow-lg shadow-cyan-400/20"
+      <div className="relative z-10">
+        {/* Icono y Badge de tamaño */}
+        <div className="flex items-start justify-between mb-4">
+          <div className="bg-white/5 w-10 h-10 rounded-lg flex items-center justify-center text-cyan-400 group-hover:bg-cyan-400 group-hover:text-black transition-all duration-300 border border-white/10">
+            {item.icon}
+          </div>
+          <span className="text-[9px] font-black uppercase tracking-widest text-white/30 bg-white/5 px-2 py-1 rounded-md border border-white/5">
+            {item.size}
+          </span>
+        </div>
+        
+        {/* Información del archivo */}
+        <h3 className="text-lg font-black mb-1 group-hover:text-cyan-400 transition-colors line-clamp-1 italic uppercase tracking-tight">
+          {item.name}
+        </h3>
+        <p className="text-xs text-purple-200/60 mb-5 line-clamp-2 leading-relaxed">
+          {item.desc}
+        </p>
+        
+        {/* Botón de descarga optimizado */}
+        <button
+          className="w-full bg-white/5 hover:bg-cyan-400 text-white hover:text-black py-2.5 rounded-xl border border-white/10 hover:border-cyan-400 flex items-center justify-center gap-2 transition-all duration-200 font-bold text-xs uppercase italic tracking-widest"
           onClick={() => window.open(item.link, '_blank')}
           aria-label={`Descargar ${item.name}`}
         >
-          <Download className="w-5 h-5" />
-        </motion.button>
+          <Download className="w-4 h-4" />
+          <span>Descargar</span>
+        </button>
       </div>
     </motion.div>
   );

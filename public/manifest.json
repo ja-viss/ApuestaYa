@@ -8,14 +8,14 @@
   "theme_color": "#22d3ee",
   "icons": [
     {
-      "src": "https://picsum.photos/seed/apuestaya/192/192",
+      "src": "/hero-image.jpeg",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/jpeg"
     },
     {
-      "src": "https://picsum.photos/seed/apuestaya/512/512",
+      "src": "/hero-image.jpeg",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/jpeg"
     }
   ]
 }
