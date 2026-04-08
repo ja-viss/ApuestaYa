@@ -92,32 +92,37 @@ export const DriveDownloadsList: React.FC<DriveDownloadsListProps> = ({ filter, 
 
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center py-20 gap-4">
-        <div className="w-12 h-12 border-4 border-cyan-400/10 border-t-cyan-400 rounded-full animate-spin" />
-        <p className="text-xs font-black uppercase tracking-widest text-cyan-400 animate-pulse">Sincronizando Drive...</p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        {[...Array(6)].map((_, i) => (
+          <div key={i} className="h-48 bg-white rounded-xl animate-pulse border border-slate-100 shadow-sm" />
+        ))}
       </div>
     );
   }
 
   return (
     <div className="space-y-8">
-      {/* Barra de búsqueda dinámica */}
-      <div className="relative max-w-md">
+      {/* Barra de búsqueda dinámica con estilo técnico Light */}
+      <div className="relative max-w-md group">
+        <div className="absolute -inset-0.5 bg-pink-500/20 rounded-xl blur opacity-0 group-focus-within:opacity-100 transition-opacity" />
         <input 
           type="text"
-          placeholder="Buscar archivos..."
+          placeholder="Buscar_Archivos_System..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-cyan-400/50 transition-all placeholder:text-white/20"
+          className="relative w-full bg-white border border-slate-200 rounded-xl px-5 py-4 text-sm focus:outline-none focus:border-pink-500/50 transition-all placeholder:text-slate-300 font-mono text-slate-700 shadow-sm"
         />
-        {searchTerm && (
-          <button 
-            onClick={() => setSearchTerm("")}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-black uppercase text-white/40 hover:text-white"
-          >
-            Limpiar
-          </button>
-        )}
+        <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-2">
+          {searchTerm && (
+            <button 
+              onClick={() => setSearchTerm("")}
+              className="text-[9px] font-black uppercase text-pink-500 hover:text-pink-700 transition-colors"
+            >
+              [Clear]
+            </button>
+          )}
+          <div className="w-1.5 h-1.5 bg-pink-500 rounded-full animate-pulse" />
+        </div>
       </div>
 
       {error ? (
