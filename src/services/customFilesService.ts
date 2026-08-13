@@ -3,7 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { DriveFile } from "./driveService";
+import { db } from "../firebase";
+import { collection, addDoc, getDocs, deleteDoc, doc, onSnapshot, query, orderBy } from "firebase/firestore";
 
 export interface CustomFileItem {
   id: string;
@@ -22,11 +23,12 @@ const STORAGE_KEY = "apuestaya_custom_uploaded_files";
 
 /**
  * Servicio para gestionar archivos subidos directamente en la plataforma.
- * Soporta cualquier extensión y cualquier nombre de archivo.
+ * Sincronizado en tiempo real mediante Firebase Firestore para que todos los usuarios
+ * vean los archivos subidos por cualquier persona desde cualquier dispositivo.
  */
 export const customFilesService = {
   /**
-   * Obtiene la lista de archivos personalizados guardados localmente.
+   * Obtiene la lista de archivos personalizados guardados localmente (cache rápido).
    */
   getCustomFiles(): CustomFileItem[] {
     try {
@@ -40,34 +42,122 @@ export const customFilesService = {
   },
 
   /**
-   * Guarda un nuevo archivo de cualquier formato.
+   * Guarda localmente en el almacenamiento del navegador.
    */
-  addCustomFile(file: Omit<CustomFileItem, "id" | "createdAt">): CustomFileItem {
-    const customFiles = this.getCustomFiles();
+  saveLocalFiles(files: CustomFileItem[]): void {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(files));
+    } catch (e) {
+      console.error("Error al guardar cache local:", e);
+    }
+  },
+
+  /**
+   * Se suscribe a los cambios en Firestore para recibir los archivos en tiempo real.
+   * Permite que lo subido por una persona aparezca instantáneamente a todos los usuarios.
+   */
+  subscribeCustomFiles(callback: (files: CustomFileItem[]) => void): () => void {
+    try {
+      const customCollection = collection(db, "custom_files");
+      const q = query(customCollection, orderBy("createdAt", "desc"));
+
+      return onSnapshot(
+        q,
+        (snapshot) => {
+          const files: CustomFileItem[] = snapshot.docs.map((docSnap) => {
+            const data = docSnap.data();
+            return {
+              id: docSnap.id,
+              name: data.name || "Archivo sin nombre",
+              size: data.size || "N/A",
+              mimeType: data.mimeType || "application/octet-stream",
+              description: data.description || "",
+              downloadUrl: data.downloadUrl || "#",
+              category: data.category || "Drive",
+              extension: data.extension || "",
+              imageUrl: data.imageUrl || "",
+              createdAt: data.createdAt || Date.now(),
+            } as CustomFileItem;
+          });
+
+          // Guardar en cache local y notificar al suscriptor
+          this.saveLocalFiles(files);
+          callback(files);
+        },
+        (error) => {
+          console.warn("Firestore error (se usará cache local):", error);
+          // Notificar con el cache local si falla la red
+          callback(this.getCustomFiles());
+        }
+      );
+    } catch (e) {
+      console.error("Error al suscribirse a Firestore:", e);
+      callback(this.getCustomFiles());
+      return () => {};
+    }
+  },
+
+  /**
+   * Guarda un nuevo archivo de cualquier formato en la nube (Firestore) y localmente.
+   */
+  async addCustomFile(file: Omit<CustomFileItem, "id" | "createdAt">): Promise<CustomFileItem> {
+    const createdAt = Date.now();
+    const tempId = "custom_" + createdAt + "_" + Math.random().toString(36).substring(2, 7);
+
     const newFile: CustomFileItem = {
       ...file,
-      id: "custom_" + Date.now() + "_" + Math.random().toString(36).substring(2, 9),
-      createdAt: Date.now(),
+      id: tempId,
+      createdAt,
     };
 
-    customFiles.unshift(newFile);
+    // Actualizar cache local inmediatamente para respuesta instantánea en UI
+    const currentLocal = this.getCustomFiles();
+    currentLocal.unshift(newFile);
+    this.saveLocalFiles(currentLocal);
+
+    // Guardar en Firestore para que se comparta con todos los usuarios
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(customFiles));
+      const docRef = await addDoc(collection(db, "custom_files"), {
+        name: file.name,
+        description: file.description,
+        size: file.size,
+        mimeType: file.mimeType,
+        downloadUrl: file.downloadUrl,
+        category: file.category,
+        extension: file.extension,
+        imageUrl: file.imageUrl || "",
+        createdAt: createdAt,
+      });
+
+      newFile.id = docRef.id;
     } catch (e) {
-      console.error("Error al guardar en localStorage:", e);
+      console.error("No se pudo guardar en la nube Firestore:", e);
     }
+
     return newFile;
   },
 
   /**
-   * Elimina un archivo personalizado por ID.
+   * Elimina un archivo personalizado por ID en Firestore y localmente.
    */
-  removeCustomFile(id: string): void {
-    const customFiles = this.getCustomFiles().filter((f) => f.id !== id);
+  async removeCustomFile(id: string): Promise<void> {
+    const updated = this.getCustomFiles().filter((f) => f.id !== id);
+    this.saveLocalFiles(updated);
+
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(customFiles));
+      if (!id.startsWith("custom_")) {
+        await deleteDoc(doc(db, "custom_files", id));
+      } else {
+        // En caso de id temporal, buscar por ID o borrar local
+        const snapshot = await getDocs(collection(db, "custom_files"));
+        snapshot.forEach((docSnap) => {
+          if (docSnap.id === id) {
+            deleteDoc(doc(db, "custom_files", docSnap.id)).catch(() => {});
+          }
+        });
+      }
     } catch (e) {
-      console.error("Error al eliminar archivo local:", e);
+      console.error("Error al eliminar archivo de Firestore:", e);
     }
   },
 
@@ -167,3 +257,4 @@ export const customFilesService = {
     }
   },
 };
+

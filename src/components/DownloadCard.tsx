@@ -4,8 +4,8 @@
  */
 
 import { motion } from "motion/react";
-import { Download, Trash2, Tag, Layers } from "lucide-react";
-import React, { ReactNode, memo, useState } from "react";
+import { Download, Trash2 } from "lucide-react";
+import React, { ReactNode, memo } from "react";
 
 /**
  * Interfaz para definir la estructura de un archivo descargable.
@@ -32,15 +32,15 @@ interface DownloadCardProps {
   index: number;
 }
 
-/**
- * Componente reutilizable para mostrar una tarjeta de descarga con animaciones.
- * Optimizado con memo para evitar re-renders innecesarios.
- */
 export const DownloadCard = memo(({ item, index }: DownloadCardProps) => {
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
 
   // Extensión calculada si no viene dada
   const fileExt = item.extension || (item.name.includes(".") ? "." + item.name.split(".").pop() : "");
+
+  const handleDownload = () => {
+    window.open(item.link, '_blank');
+  };
 
   return (
     <motion.div
@@ -58,7 +58,7 @@ export const DownloadCard = memo(({ item, index }: DownloadCardProps) => {
       <div className="absolute top-0 left-0 w-1.5 h-full bg-pink-500 opacity-0 group-hover:opacity-100 transition-opacity z-20" />
       
       <div>
-        {/* Header con Icono, Categoría, Extensión y Tamaño (Sin imágenes) */}
+        {/* Header con Icono, Categoría, Extensión y Tamaño */}
         <div className="flex items-center justify-between gap-2 mb-4">
           <div className="flex items-center gap-2.5">
             <div className="w-10 h-10 rounded-xl bg-pink-50 flex items-center justify-center text-pink-500 group-hover:scale-110 transition-transform border border-pink-100 shrink-0">
@@ -114,7 +114,7 @@ export const DownloadCard = memo(({ item, index }: DownloadCardProps) => {
       <div className="pt-2 flex gap-2">
         <button
           className="flex-1 bg-slate-900 hover:bg-pink-500 text-white py-2.5 px-4 rounded-xl shadow-sm transition-all duration-150 font-black text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 group/btn active:scale-95"
-          onClick={() => window.open(item.link, '_blank')}
+          onClick={handleDownload}
           aria-label={`Descargar ${item.name}`}
         >
           <Download className="w-3.5 h-3.5 group-hover/btn:translate-y-0.5 transition-transform" />

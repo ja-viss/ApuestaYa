@@ -41,12 +41,22 @@ export const DriveDownloadsList: React.FC<DriveDownloadsListProps> = ({ filter, 
 
   useEffect(() => {
     let isMounted = true;
+
+    // Cargar cache inicial inmediatamente
+    setCustomFiles(customFilesService.getCustomFiles());
+
+    // Suscribirse a cambios en la nube en tiempo real
+    const unsubscribeCustom = customFilesService.subscribeCustomFiles((updatedCustomFiles) => {
+      if (isMounted) {
+        setCustomFiles(updatedCustomFiles);
+      }
+    });
+
     const fetchAllFiles = async () => {
       try {
         const fetchedDriveFiles = await driveService.getFiles();
         if (isMounted) {
           setDriveFiles(fetchedDriveFiles);
-          setCustomFiles(customFilesService.getCustomFiles());
         }
       } catch (err) {
         if (isMounted) {
@@ -61,7 +71,11 @@ export const DriveDownloadsList: React.FC<DriveDownloadsListProps> = ({ filter, 
     };
 
     fetchAllFiles();
-    return () => { isMounted = false; };
+
+    return () => {
+      isMounted = false;
+      unsubscribeCustom();
+    };
   }, []);
 
   // Unificación de archivos de Drive y subidos

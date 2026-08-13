@@ -52,6 +52,10 @@ service cloud.firestore {
       allow delete: if isAdmin();
     }
 
+    match /custom_files/{fileId} {
+      allow read, write: if true;
+    }
+
     match /users/{userId} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }

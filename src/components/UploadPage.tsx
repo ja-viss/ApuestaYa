@@ -31,9 +31,16 @@ export const UploadPage = () => {
     const isAuth = localStorage.getItem("isTechnicalAuthenticated");
     if (!isAuth) {
       navigate("/login");
-    } else {
-      setCustomFiles(customFilesService.getCustomFiles());
+      return;
     }
+
+    setCustomFiles(customFilesService.getCustomFiles());
+
+    const unsubscribe = customFilesService.subscribeCustomFiles((files) => {
+      setCustomFiles(files);
+    });
+
+    return () => unsubscribe();
   }, [navigate]);
 
   const handleLogout = () => {
@@ -54,7 +61,7 @@ export const UploadPage = () => {
   };
 
   // Manejar el submit de la carga
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!fileName.trim()) return;
 
@@ -68,11 +75,9 @@ export const UploadPage = () => {
     if (uploadMode === "file" && selectedFile) {
       // Crear ObjectURL para descarga directa
       downloadUrl = URL.createObjectURL(selectedFile);
-      sizeStr = customFilesService.getGoogleImageForFile
-        ? (selectedFile.size / (1024 * 1024) > 1 
+      sizeStr = (selectedFile.size / (1024 * 1024) > 1 
             ? `${(selectedFile.size / (1024 * 1024)).toFixed(1)} MB` 
-            : `${(selectedFile.size / 1024).toFixed(1)} KB`)
-        : "Descarga Directa";
+            : `${(selectedFile.size / 1024).toFixed(1)} KB`);
       mimeType = selectedFile.type || "application/octet-stream";
       ext = selectedFile.name.includes(".") ? "." + selectedFile.name.split(".").pop() : "";
     } else if (uploadMode === "url" && externalUrl.trim()) {
@@ -85,7 +90,7 @@ export const UploadPage = () => {
     const finalCat = category || customFilesService.categorizeFile(fileName, description);
     const imageUrl = customFilesService.getGoogleImageForFile(fileName, mimeType);
 
-    customFilesService.addCustomFile({
+    await customFilesService.addCustomFile({
       name: fileName.trim(),
       description: description.trim() || `Archivo ${ext.toUpperCase() || 'técnico'} subido sin restricciones.`,
       size: sizeStr,
