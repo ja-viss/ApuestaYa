@@ -18,7 +18,7 @@ type UnifiedFile = {
   mimeType: string;
   link: string;
   source: "drive" | "upload";
-  category: "Windows 10" | "Windows 7" | "Herramientas" | "Drive";
+  category: "Windows 10" | "Windows 7" | "Herramientas" | "Atenas" | "Drive";
   imageUrl: string;
   thumbnailLink?: string;
   extension?: string;

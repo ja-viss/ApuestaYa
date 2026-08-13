@@ -12,7 +12,7 @@ export interface CustomFileItem {
   mimeType: string;
   description: string;
   downloadUrl: string;
-  category: "Windows 10" | "Windows 7" | "Herramientas" | "Drive";
+  category: "Windows 10" | "Windows 7" | "Herramientas" | "Atenas" | "Drive";
   extension: string;
   imageUrl?: string;
   createdAt: number;
@@ -75,9 +75,12 @@ export const customFilesService = {
    * Determina la categoría basada en el nombre o descripción.
    * Si no coincide con nada, asigna "Drive" (Uncategorized / Repositorio General).
    */
-  categorizeFile(fileName: string, description: string = ""): "Windows 10" | "Windows 7" | "Herramientas" | "Drive" {
+  categorizeFile(fileName: string, description: string = ""): "Windows 10" | "Windows 7" | "Herramientas" | "Atenas" | "Drive" {
     const text = (fileName + " " + description).toLowerCase();
 
+    if (text.includes("atenas")) {
+      return "Atenas";
+    }
     if (text.includes("win10") || text.includes("windows 10") || text.includes("windows10")) {
       return "Windows 10";
     }
@@ -93,8 +96,7 @@ export const customFilesService = {
       text.includes("fix") ||
       text.includes("anydesk") ||
       text.includes("systemcare") ||
-      text.includes("3dp") ||
-      text.includes("atenas")
+      text.includes("3dp")
     ) {
       return "Herramientas";
     }

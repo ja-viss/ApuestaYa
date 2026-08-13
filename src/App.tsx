@@ -20,6 +20,7 @@ const HomePage = lazy(() => import("./components/HomePage"));
 const Windows10Page = lazy(() => import("./components/Windows10Page"));
 const Windows7Page = lazy(() => import("./components/Windows7Page"));
 const ToolsPage = lazy(() => import("./components/ToolsPage"));
+const AtenasPage = lazy(() => import("./components/AtenasPage"));
 const DrivePage = lazy(() => import("./components/DrivePage"));
 const LoginPage = lazy(() => import("./components/LoginPage").then(m => ({ default: m.LoginPage })));
 const UploadPage = lazy(() => import("./components/UploadPage").then(m => ({ default: m.UploadPage })));
@@ -146,6 +147,7 @@ const Navbar = () => {
         <Link to="/windows10" className="hover:text-pink-500 transition-colors">Windows 10</Link>
         <Link to="/windows7" className="hover:text-pink-500 transition-colors">Windows 7</Link>
         <Link to="/tools" className="hover:text-pink-500 transition-colors">Herramientas</Link>
+        <Link to="/atenas" className="hover:text-pink-500 transition-colors">Atenas</Link>
         <Link to="/drive" className="hover:text-pink-500 transition-colors">Drive</Link>
       </div>
 
@@ -199,6 +201,7 @@ const Navbar = () => {
               <Link to="/windows10" className="py-4 border-b border-slate-50 hover:text-pink-500">Windows 10</Link>
               <Link to="/windows7" className="py-4 border-b border-slate-50 hover:text-pink-500">Windows 7</Link>
               <Link to="/tools" className="py-4 border-b border-slate-50 hover:text-pink-500">Herramientas</Link>
+              <Link to="/atenas" className="py-4 border-b border-slate-50 hover:text-pink-500">Atenas</Link>
               <Link to="/drive" className="py-4 border-b border-slate-50 hover:text-pink-500">Drive</Link>
               <Link to="/login" className="mt-4">
                 <button className="w-full bg-pink-500 text-white py-5 rounded-2xl font-black uppercase tracking-widest shadow-lg shadow-pink-500/20">
@@ -242,6 +245,7 @@ export default function App() {
               <Route path="/windows10" element={<Windows10Page />} />
               <Route path="/windows7" element={<Windows7Page />} />
               <Route path="/tools" element={<ToolsPage />} />
+              <Route path="/atenas" element={<AtenasPage />} />
               <Route path="/drive" element={<DrivePage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/upload" element={<UploadPage />} />

@@ -4,7 +4,7 @@
  */
 
 import { motion } from "motion/react";
-import { Smartphone, Settings, ShieldCheck, Monitor, Trophy, Wrench, Globe } from "lucide-react";
+import { Smartphone, Settings, ShieldCheck, Monitor, Trophy, Wrench, Globe, Layers } from "lucide-react";
 import { Link } from "react-router-dom";
 
 /**
@@ -102,11 +102,12 @@ export default function HomePage() {
       </section>
 
       {/* Categorías Rápidas */}
-      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
+      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 md:gap-6">
         {[
           { to: "/windows10", icon: Monitor, title: "Windows 10", desc: "Drivers Modernos" },
           { to: "/windows7", icon: Smartphone, title: "Windows 7", desc: "Sistemas Legacy" },
           { to: "/tools", icon: Wrench, title: "Herramientas", desc: "Software Técnico" },
+          { to: "/atenas", icon: Layers, title: "Atenas", desc: "Sistemas Atenas" },
           { to: "/drive", icon: Globe, title: "Repositorio", desc: "Archivos Drive" }
         ].map((item, idx) => (
           <Link key={item.to} to={item.to} className="group">

@@ -21,7 +21,7 @@ export const UploadPage = () => {
   const [fileName, setFileName] = useState("");
   const [description, setDescription] = useState("");
   const [externalUrl, setExternalUrl] = useState("");
-  const [category, setCategory] = useState<"Windows 10" | "Windows 7" | "Herramientas" | "Drive">("Drive");
+  const [category, setCategory] = useState<"Windows 10" | "Windows 7" | "Herramientas" | "Atenas" | "Drive">("Drive");
   const [uploadMode, setUploadMode] = useState<"file" | "url">("file");
   const [isSuccess, setIsSuccess] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -279,6 +279,7 @@ export const UploadPage = () => {
                     <option value="Windows 10">Windows 10</option>
                     <option value="Windows 7">Windows 7</option>
                     <option value="Herramientas">Herramientas</option>
+                    <option value="Atenas">Sistemas Atenas</option>
                     <option value="Drive">Drive (General / Sin Categoría)</option>
                   </select>
                   <p className="text-[10px] text-slate-400 mt-1">

@@ -69,6 +69,7 @@ export const DownloadCard = memo(({ item, index }: DownloadCardProps) => {
                 item.category === 'Windows 10' ? 'bg-blue-50 text-blue-600 border-blue-200' :
                 item.category === 'Windows 7' ? 'bg-indigo-50 text-indigo-600 border-indigo-200' :
                 item.category === 'Herramientas' ? 'bg-emerald-50 text-emerald-600 border-emerald-200' :
+                item.category === 'Atenas' ? 'bg-amber-50 text-amber-700 border-amber-300' :
                 'bg-pink-50 text-pink-600 border-pink-200'
               }`}>
                 {item.category}
